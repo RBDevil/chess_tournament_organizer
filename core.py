@@ -46,7 +46,7 @@ class Tournament:
 
         self.max_boards: int = 3
 
-        self.elo_manager = EloManager(db_path=Path('/home/ad.adasworks.com/boldizsar.verseghi-n/chess_software/saves/elo_db.json'))
+        self.elo_manager = EloManager(db_path=Path('saves/elo_db.json'))
 
         # Pairings waiting to be played in this round
         self.pairing_queue: List[Tuple[str, str]] = []

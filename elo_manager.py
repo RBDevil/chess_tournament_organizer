@@ -113,11 +113,6 @@ class EloManager:
         """Return a copy of the Elo dictionary."""
         return dict(self.elos)
 
-if __name__ == '__main__':
-    from storage import TournamentStorage
 
-    path = '/home/ad.adasworks.com/boldizsar.verseghi-n/chess_software/autosaves/final_20260306_103438.json'
-    tournament = TournamentStorage.load_tournament(path)
-    elo = EloManager()
-    elo.update_elos(tournament.history)
-    print(elo.elos)
+if __name__ == '__main__':
+    pass
