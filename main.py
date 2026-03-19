@@ -29,6 +29,7 @@ from PyQt5.QtWidgets import (
 from core import Game, Player, Tournament
 from PyQt5.QtWidgets import QFileDialog
 from storage import TournamentStorage
+import math
 
 # -----------------------------------------------------------------------------
 # UI
@@ -338,11 +339,35 @@ class MainWindow(QMainWindow):
             self._show_error(str(exc))
 
     def _add_player(self) -> None:
-        name: str = self.player_input.text().strip()
+        if len(self.tournament.active_games) > 0:
+            msg = QMessageBox(self)
+            msg.setWindowTitle("Late Player")
+            msg.setText(
+                f"Can't add player mid round.."
+            )
+            msg.setStandardButtons(QMessageBox.StandardButton.Ok)
+            if msg.exec() == QMessageBox.StandardButton.Ok:
+                return
 
+        name = self.player_input.text().strip()
         if not name:
             return
 
+        if self.tournament.started:
+            rounds = self.tournament.round_number
+            start_score = math.floor(rounds / 2)
+
+            msg = QMessageBox(self)
+            msg.setWindowTitle("Late Player")
+            msg.setText(
+                f"The tournament already started.\n\n"
+                f"{name} will start with {start_score} points "
+                f"(floor({rounds}/2))."
+            )
+            msg.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+
+            if msg.exec() == QMessageBox.StandardButton.Cancel:
+                return
         try:
             self.tournament.add_player(name)
         except ValueError as exc:
@@ -352,6 +377,7 @@ class MainWindow(QMainWindow):
         self.player_list.addItem(name)
         self.player_input.clear()
         self._refresh_player_list()
+        self._refresh_standings()
 
     def _start_tournament(self) -> None:
         try:

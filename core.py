@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple
 from pathlib import Path
 from elo_manager import EloManager
-
+import math
 
 # -----------------------------------------------------------------------------
 # Data Models
@@ -68,11 +68,15 @@ class Tournament:
     # ----------------------------
 
     def add_player(self, name: str) -> None:
-        if self.started:
-            raise ValueError("Cannot add players after tournament start")
-
         if name in self.players:
             raise ValueError("Player already exists")
+
+        player = Player(name=name)
+
+        if self.started:
+            past_rounds: int = self.round_number
+            player.score = math.floor(past_rounds / 2)
+            player.games_played = past_rounds
 
         self.players[name] = Player(name=name)
 

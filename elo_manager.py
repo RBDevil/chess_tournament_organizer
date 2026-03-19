@@ -18,7 +18,7 @@ from typing import Dict, List
 # Constants
 # ----------------------------
 
-DEFAULT_ELO = 1200
+DEFAULT_ELO = 1000
 K_FACTOR = 32  # Typical value for club level Elo
 DB_PATH = Path("saves/elo_db.json")
 
